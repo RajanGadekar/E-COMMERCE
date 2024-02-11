@@ -1,0 +1,45 @@
+<%- include('nav.ejs') %>
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="container-fluid bg-white p-3">
+        <div class="row">
+            <h1>PRODUCT LIST</h1>
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">SN</th>
+                        <th scope="col">CATEGORY</th>
+                        <th scope="col">SUBCATEGORY</th>
+                        <th scope="col">PRODUCT</th>
+                        <th scope="col">PRICE</th>
+                        <th scope="col">COMPANY</th>
+                        <th scope="col">RATING</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <% for(i=0;i<products.length;i++) { %>
+                            <tr>
+                                <th scope="row"><%=i+1%></th>
+                                <td><%=products[i].category_name%></td>
+                                <td><%=products[i].sub_cat_name%></td>
+                                <td><%=products[i].product_name%></td>
+                                <td><del>&#8377 <%=products[i].duplicate_price%></del>
+                                &#8377 <%=products[i].product_price%></td>
+                                <td><%=products[i].product_company%></td>
+                                <td><%=products[i].product_rating%></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                  </table>
+                  </body>
+                  </html>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('footer.ejs')%>
+
+

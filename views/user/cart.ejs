@@ -1,0 +1,95 @@
+<%- include('nav.ejs') %>
+<br>
+<div class="conatiner">
+    <h1>Your Cart</h1>
+    <br>
+    <table class="table table-scriped table-bordered">
+        <tr>
+            <th>PRODUCT NAME</th>
+            <th>PRODUCT RATE</th>
+            <th>PRODUCT QTY</th>
+            <th>PRODUCT TOTAL</th>
+        </tr>
+        <% sum=0;
+        for(i=0;i<cartdata.length;i++)
+        {
+            sum+=(cartdata[i].product_price*cartdata[i].qty);
+        %>
+            <tr id="trrow<%=cartdata[i].cart_id%>">
+                <td><%=cartdata[i].product_name%></td>
+
+                <td id="price_rate<%=cartdata[i].cart_id%>"><%=cartdata[i].product_price%></td>
+                <td style="width: 20px;">
+                    <table>
+                        <tr>
+                            <td onclick="changeQty('<%=cartdata[i].cart_id%>','minus')"><span class="btn btn-success"><i class="fa fa-minus"></i></span></td>
+                            <td id="current_qty<%=cartdata[i].cart_id%>"><%=cartdata[i].qty%></td>
+                            <td onclick="changeQty('<%=cartdata[i].cart_id%>','plus')"><span class="btn btn-success"><i class="fa fa-plus"></i></span></td>
+                        </tr>
+                    </table>
+                </td>
+                <td id="product_ttl<%=cartdata[i].cart_id%>" class="prod_ttl"><%= cartdata[i].product_price*cartdata[i].qty%><td>
+            </tr>
+        <% 
+        }
+        if(sum>0)
+        { 
+        %> 
+            <tr style="background-color: lightgreen;font-size: 25px;font-weight: bold">
+            <td colspan="3">Total</td>
+            <td>&#8377; <span id="final_price"><%= sum %> </span>/-</td>
+        </tr>
+        <% 
+        }
+        %>
+    </table>
+    <% 
+    if(sum>0)
+        { %>
+    <div class="text-right">
+        <a href="/checkout_order">
+        <button class="btn btn-primary btn-lg">Checkout</button>
+    </a>
+    </div>
+    <% 
+        }
+        %>
+</div>
+<br>
+<br>
+<%- include('footer.ejs') %>
+<script>
+    function changeQty(cart_id,operation){
+        console.log("cart_id",cart_id,"Operation",operation);
+        var obj={
+            url:'/changeOtyByAjax',
+            type:'POST',
+            data:{'cart_id':cart_id,'operation':operation}
+        };
+        $.ajax(obj).done(
+            function(result){
+                console.log(result)
+                $("#current_qty"+cart_id).html(result.qty);
+                printProductTotal(cart_id);
+                if(result.status=='deleted')
+                {
+                    $("#trrow"+cart_id).remove();
+                }
+            }
+        )
+    }
+    function printProductTotal(cart_id)  {
+        var a=$("#price_rate"+cart_id).html()
+        var b=$("#current_qty"+cart_id).html()
+        
+        $("#product_ttl"+cart_id).html(a*b)
+
+        var p_ttls=$(".prod_ttl");
+        sum=0;
+        for(i=0;i<p_ttls.length;i++){
+            sum+=Number(p_ttls[i].innerHTML)
+        }
+        $("#final_price").html('');                                                                                                                                
+        $("#final_price").html(sum);                                                                                                                                
+    }
+</script>

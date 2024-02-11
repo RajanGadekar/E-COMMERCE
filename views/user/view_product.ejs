@@ -1,0 +1,23 @@
+<%- include('nav.ejs') %>
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <img src="/uploads/<%=product.product_image%>" width="100%">
+        </div>
+        <div class="col-md-7">
+            <h3><%=product.product_name%></h3>
+            <h5><%=product.category_name%> / <%=product.sub_cat_name%></h5>
+            <h4><big><b>&#8377 <%=product.price%></b></big></h4>
+            <del>&#8377 <%=product.duplicate_price%></del>
+            <h5>Rating : <%=product.product_rating%></h5>
+            <p><%=product.product_desciption%></p>
+            <% if(!isincart) { %>
+            <a href="/add_to_cart?product_id=<%=product.product_id%>"><button  class="btn btn-primary">ADD TO CART</button></a>
+            <% } %>
+            <button class="btn btn-success">Buy Now</button>
+        </div>
+    </div>
+</div>
+<br><br>
+<%- include('footer.ejs') %>

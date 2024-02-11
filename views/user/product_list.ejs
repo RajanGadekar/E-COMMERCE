@@ -1,0 +1,23 @@
+<%- include('nav.ejs') %>
+<br><br>
+<div class="container">
+    <div class="row">
+      <% for(i=0;i<products.length;i++) { %>
+      <div class="col-md-4">
+        <div class="card">
+        <img class="card-img-top w-100" style="width: 100%;" src="/uploads/<%=products[i].product_image%>" alt="Card Not Found">
+        <div class="card-body">
+          <h4 class="card-title"><%=products[i].product_name%></h4>
+          <p class="card-text">
+            <big><b>&#8377 <%=products[i].product_price%></b></big>
+            <del>&#8377 <%=products[i].duplicate_price%></del>
+          </p>
+          <a href="/view_product?product_id=<%=products[i].product_id%>" class="btn btn-primary">VIEW PRODUCT</a>
+        </div>  
+      </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+<br><br>
+<%- include('footer.ejs') %>

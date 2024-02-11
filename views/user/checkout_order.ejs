@@ -1,0 +1,81 @@
+<%- include('nav.ejs') %>
+    <br><br>
+    <form action="/place_order" method="post">
+        <div class="conatiner">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="p-5" style="border-color: lavender">
+                    Area :
+                    <input type="text" required class="form-control" name="area">
+                    <br>
+                    Landmark :
+                    <input type="text" required class="form-control" name="landmark">
+                    <br>
+                    City :
+                    <input type="text" required class="form-control" name="city">
+                    <br>
+                    Dist :
+                    <input type="text" required class="form-control" name="dist">
+                    <br>
+                    State :
+                    <input type="text" required class="form-control" name="state">
+                    <br>
+                    Pin-Code :
+                    <input type="number" required class="form-control" name="pincode">
+                    <br>
+                </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <table class="table table-scriped table-bordered">
+                            <tr>
+                                <th>PRODUCT NAME</th>
+                                <th>PRODUCT RATE</th>
+                                <th>PRODUCT QTY</th>
+                                <th>PRODUCT TOTAL</th>
+                            </tr>
+                            <% sum=0;
+                            ttl_qty=0
+                            for(i=0;i<cartdata.length;i++)
+                            {
+                                sum+=(cartdata[i].product_price*cartdata[i].qty);
+                                ttl_qty+=Number(cartdata[i].qty)
+                            %>
+                                <tr id="trrow<%=cartdata[i].cart_id%>">
+                                    <td><%=cartdata[i].product_name%></td>
+                    
+                                    <td id="price_rate<%=cartdata[i].cart_id%>"><%=cartdata[i].product_price%></td>
+                                    <td>    
+                                        <%=cartdata[i].qty%>  Qty      
+                                    </td>
+                                    <td id="product_ttl<%=cartdata[i].cart_id%>" class="prod_ttl"><%= cartdata[i].product_price*cartdata[i].qty%><td>
+                                </tr>
+                            <% 
+                            }
+                            if(sum>0)
+                            { 
+                            %> 
+                                <tr style="background-color: lightgreen;font-size: 25px;font-weight: bold">
+                                <td colspan="3">Total</td>
+                                <td>&#8377; <span id="final_price"></span><%= sum %> /-</td>
+                            </tr>
+                            <% 
+                            }
+                            %>
+                        </table>
+                    </div>
+                    <div style="font-size: 30px;">
+                        <input type="radio" name="payment_type" value="cod" style="height: 40px;width: 40px;"> COD
+                    </div>
+                    <div class="text-right">
+                        <br><br>
+                        <input type="hidden" value="<%= sum %>" name="ttl_order_amt">
+                        <input type="hidden" value="<%= ttl_qty %>" name="ttl_order_qty">
+                        <button class="btn btn-primary btn-lg">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br><br>
+    <%- include('footer.ejs') %>

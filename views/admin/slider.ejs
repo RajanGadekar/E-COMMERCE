@@ -1,0 +1,46 @@
+<%- include('nav.ejs') %>
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="content p-2">
+            <form action="/admin/saveslider" method="post" enctype="multipart/form-data">
+            <div class="container-fluid bg-white p-3">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="text-dark">ADD NEW SLIDER</h3>
+                    </div>
+                    <div class="col-6 mt-3">
+                        <label class="text-dark">SELECT IMAGE</label><br></br>
+                        <input type="file" name="slider_image" class="form-control" accept="image/*" required>
+                    </div>
+                    <div class="col-6 mt-3">
+                        <label class="text-dark">REDIRECTION URL</label><br></br>
+                        <input type="text" name="url" class="form-control" accept="image/*" required>
+                    </div>
+                    <div class="col-12 mt-3 text-right">
+                        <button class="btn btn-primary">SAVE SLIDER</button>
+                    </div>
+                </div>
+                </div>
+            </form>
+            </div>
+            <table class="table table-striped">                
+                <thead>
+                  <tr>
+                    <th scope="col">SN</th>
+                    <th>Image</th>
+                    <th scope="col">URL</th>                    
+                  </tr>
+                </thead>
+                <tbody>                  
+                    <% for(i=0;i<slider_image.length;i++) { %>
+                    <tr>
+                    <td><%=i+1%></td>
+                    <td><img width="50%" src="/uploads/<%=slider_image[i].slider_image%>"></td>
+                    <td><%=slider_image[i].url%></td>
+                    </tr>
+                    <% } %>                                    
+                </tbody>                
+              </table>
+          </div>
+        </div>        
+   <%- include('footer.ejs')%>
