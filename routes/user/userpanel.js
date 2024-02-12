@@ -221,7 +221,9 @@ router.post("/place_order",(req,res)=>{
     var sql=query.insert("order_tbl",req.body);
     con.query(sql,(err,result)=>{
         console.log(result.insertId)
+        let data=[];
         sql=`SELECT * FROM cart,product WHERE user_id='${req.session.user_id}' AND product.product_id=cart.product_id`;
+
         con.query(sql,(err,result1)=>{
             for(i=0;i<result1.length;i++){
                 order_product_details = {
@@ -236,9 +238,9 @@ router.post("/place_order",(req,res)=>{
                     'product_discription':result1[i].product_desciption,
                     'product_image':result1[i].product_image
                 }
-                console.log(order_product_details);
-                break;
+                data.push(order_product_details)
             }
+            console.log("the data is",data);
         })
     })   
     res.send("Data Recieved")
