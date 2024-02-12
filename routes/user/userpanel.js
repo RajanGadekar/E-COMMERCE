@@ -217,10 +217,30 @@ router.post("/place_order",(req,res)=>{
     req.session.user_id=2;
     validateLogin(req.session,res);
     req.body.user_id=req.session.user_id;
-    var sql = query.create("order",req.body);
+    console.log(req.body)
+    var sql=query.insert("order_tbl",req.body);
     con.query(sql,(err,result)=>{
-        console.log(result)
-        res.send("Data Recieved")
-    })
+        console.log(result.insertId)
+        sql=`SELECT * FROM cart,product WHERE user_id='${req.session.user_id}' AND product.product_id=cart.product_id`;
+        con.query(sql,(err,result1)=>{
+            for(i=0;i<result1.length;i++){
+                order_product_details = {
+                    'order_id':result.insertId,
+                    'product_id':result1[i].product_id,
+                    'user_id':req.body.user_id,
+                    'qty':result1[i].qty,
+                    'product_name':result1[i].product_name,
+                    'product_price':result1[i].product_price,
+                    'product_company':result1[i].product_company,
+                    'product_color':result1[i].product_color,
+                    'product_discription':result1[i].product_desciption,
+                    'product_image':result1[i].product_image
+                }
+                console.log(order_product_details);
+                break;
+            }
+        })
+    })   
+    res.send("Data Recieved")
 })
 module.exports = router;
