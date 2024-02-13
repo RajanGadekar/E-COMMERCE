@@ -135,7 +135,10 @@ router.get("/cart",(req,res)=>{
         var sql=query.select("subcategory");
         con.query(sql,(err,result1)=>{
             sql=`SELECT * FROM cart,product WHERE user_id='${req.session.user_id}' AND product.product_id=cart.product_id`;
+            console.log("sql",sql);
             con.query(sql,(err,result2)=>{
+                console.log("result2",result2);
+
                 data={'navlist':result,'subcategory':result1,'islogin':checkLogin(req.session),'cartdata':result2};
             res.render("user/cart.ejs",data)
             })
@@ -214,14 +217,16 @@ router.get("/checkout_order",(req,res)=>{
 })
 
 router.post("/place_order",(req,res)=>{
-    req.session.user_id=2;
     validateLogin(req.session,res);
     req.body.user_id=req.session.user_id;
+    req.body.status='pending';
     var sql=query.insert("order_tbl",req.body);
+    console.log("order_tbl",sql)
     con.query(sql,(err,result)=>{
         sql=`SELECT * FROM cart,product WHERE user_id='${req.session.user_id}' AND product.product_id=cart.product_id`;
         con.query(sql,(err,result1)=>{
-            var sql = "INSERT INTO order_product_details (order_id,product_id,user_id,qty,product_name,product_price,product_company,product_color,product_desciption,product_image) VALUES "
+            console.log("result====>",result1)
+            var sql = "INSERT INTO order_product_details (order_id,product_id,user_id,qty,product_name,product_price,product_company,product_color,product_discription,product_image) VALUES "
             for(i=0;i<result1.length;i++){
                 order_product_details = {
                     'order_id':result.insertId,
@@ -232,7 +237,7 @@ router.post("/place_order",(req,res)=>{
                     'product_price':result1[i].product_price,
                     'product_company':result1[i].product_company,
                     'product_color':result1[i].product_color,
-                    'product_disciption':result1[i].product_desciption,
+                    'product_discription':result1[i].product_desciption,
                     'product_image':result1[i].product_image
                 };
                 sql+=`(`;
@@ -246,10 +251,23 @@ router.post("/place_order",(req,res)=>{
                 sql+=`),`;
             }
             sql=sql.slice(0,-1); 
-            con.query(sql,(err,result)=>{
-                res.send("Order success ->",+sql)
-            });   
+            console.log("Order product details",sql);
+            con.query(sql,(err,result3)=>{
+                con.query('DELETE FROM cart WHERE user_id="'+req.body.user_id+'"',(err,result5)=>{
+                    res.send(
+                        `<script>
+                                alert("Order Placed Successfully");
+                                window.location.assign("/order_track?order_id=${result.insertId}");
+                        </script>
+                    `);
+                })                
+            })   
         })
     })   
 })
+
+router.get("/order_track",(req,res)=>{
+    res.send("Order Track")
+})
+
 module.exports = router;

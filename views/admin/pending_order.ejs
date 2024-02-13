@@ -1,0 +1,34 @@
+<%- include('nav.ejs') %>
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="container-fluid bg-white">
+        <div class="row">
+          <h1>PENDING ORDERS</h1>
+          <div class="col-12">
+            <table class="table table-bordered text-dark">
+                        <th>ACTION</th>
+                        <th>SN</th>
+                        <th>ORDER DATE</th>
+                        <th>CUSTOMER NAME</th>
+                        <th>ORDER AMOUNT</th>
+                        <th>ORDER QTY</th>
+                    </tr>
+                <% for(i=0;i<orders.length;i++) { %>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary p-0 pl-1 pr-1">Send To Processing</button>
+                        </td>
+                        <td><%=i+1%></td>
+                        <td><%=orders[i].order_date%></td>
+                        <td><%=orders[i].user_name%></td>
+                        <td><%=orders[i].ttl_order_amt%></td>
+                        <td><%=orders[i].ttl_order_qty%></td>
+                    </tr>
+                <% } %>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('footer.ejs')%>

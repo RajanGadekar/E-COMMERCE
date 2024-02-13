@@ -123,4 +123,11 @@ router.get("/product_list",(req,res)=>{
     })
 })
 
+router.get("/pending_order",(req,res)=>{
+    sql="SELECT * FROM order_tbl,user_tbl WHERE status='pending' AND order_tbl.user_id=user_tbl_id";
+    con.query(sql,(err,result)=>{
+        res.render("admin/pending_order.ejs",{'orders':result});
+    })
+})
+
 module.exports=router;

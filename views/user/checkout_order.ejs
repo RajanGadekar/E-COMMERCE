@@ -25,8 +25,6 @@
                     <br>
                     <div style="font-size: 15px; display: flex;">
                         <input type="radio" name="payment_type" value="cod" style="height: 20px;width: 20px;"> COD
-                        
-                        
                         <button class="btn btn-primary btn-lg ml-auto">Place Order</button>
                     </div>
                 </div>                
@@ -60,6 +58,9 @@
                             %> 
                                 <tr style="background-color: lightgreen;font-size: 25px;font-weight: bold">
                                 <td colspan="3">Total</td>
+                                <input type="hidden" name="ttl_order_amt" value="<%=sum%>">
+                                <input type="hidden" name="ttl_order_qty" value="<%=ttl_qty%>">
+
                                 <td>&#8377; <span id="final_price"></span><%= sum %> /-</td>
                             </tr>
                             <% 
