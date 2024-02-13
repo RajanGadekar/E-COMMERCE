@@ -217,14 +217,11 @@ router.post("/place_order",(req,res)=>{
     req.session.user_id=2;
     validateLogin(req.session,res);
     req.body.user_id=req.session.user_id;
-    console.log(req.body)
     var sql=query.insert("order_tbl",req.body);
     con.query(sql,(err,result)=>{
-        console.log(result.insertId)
-        let data=[];
         sql=`SELECT * FROM cart,product WHERE user_id='${req.session.user_id}' AND product.product_id=cart.product_id`;
-
         con.query(sql,(err,result1)=>{
+            var sql = "INSERT INTO order_product_details (order_id,product_id,user_id,qty,product_name,product_price,product_company,product_color,product_desciption,product_image) VALUES "
             for(i=0;i<result1.length;i++){
                 order_product_details = {
                     'order_id':result.insertId,
@@ -235,14 +232,24 @@ router.post("/place_order",(req,res)=>{
                     'product_price':result1[i].product_price,
                     'product_company':result1[i].product_company,
                     'product_color':result1[i].product_color,
-                    'product_discription':result1[i].product_desciption,
+                    'product_disciption':result1[i].product_desciption,
                     'product_image':result1[i].product_image
+                };
+                sql+=`(`;
+                objvalues=Object.values(order_product_details);
+                for(j=0;j<objvalues.length;j++){
+                    if(j!=0)
+                        sql+=`,'${objvalues[j]}'`;
+                    else
+                        sql+=` '${objvalues[j]}'`;
                 }
-                data.push(order_product_details)
+                sql+=`),`;
             }
-            console.log("the data is",data);
+            sql=sql.slice(0,-1); 
+            con.query(sql,(err,result)=>{
+                res.send("Order success ->",+sql)
+            });   
         })
     })   
-    res.send("Data Recieved")
 })
 module.exports = router;
