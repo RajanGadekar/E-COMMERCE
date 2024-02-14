@@ -3,7 +3,7 @@
     <div class="content-wrapper">
       <div class="container-fluid bg-white">
         <div class="row">
-          <h1>PENDING ORDERS</h1>
+          <h1>PROCESSING ORDERS</h1>
           <div class="col-12">
             <table class="table table-bordered text-dark">
                         <th>ACTION</th>
@@ -16,8 +16,8 @@
                 <% for(i=0;i<orders.length;i++) { %>
                     <tr>
                         <td>
-                          <a href="/admin/send_to_processing?id=<%=orders[i].order_tbl_id%>">                            
-                            <button class="btn btn-primary p-0 pl-1 pr-1">Send To Processing</button>
+                          <a href="/admin/send_to_dispatch?id=<%=orders[i].order_tbl_id%>">                            
+                            <button class="btn btn-primary p-0 pl-1 pr-1">Send To Dispatch</button>
                           </a>
                           </td>
                         <td><%=i+1%></td>

@@ -156,7 +156,7 @@ router.get("/add_to_cart",(req,res)=>{
     }
     var sql=query.insert("cart",obj);
     con.query(sql,(err,result)=>{
-        console.log(result);
+        // console.log(result);
         res.redirect("/view_product?product_id="+urlData.product_id);
     })
 })
@@ -216,16 +216,27 @@ router.get("/checkout_order",(req,res)=>{
     })
 })
 
+var getCDate = (()=>{
+    today=new Date();
+    m=today.getMonth()+1;
+    if(m<10){
+        m="0"+m
+    }
+    return today.getFullYear()+'-'+m+'-'+today.getDate();
+})
+
 router.post("/place_order",(req,res)=>{
     validateLogin(req.session,res);
     req.body.user_id=req.session.user_id;
     req.body.status='pending';
+    req.body.order_date=getCDate()
     var sql=query.insert("order_tbl",req.body);
-    console.log("order_tbl",sql)
+    // console.log("order_tbl",sql)
     con.query(sql,(err,result)=>{
+        order_id=result.insertId;
         sql=`SELECT * FROM cart,product WHERE user_id='${req.session.user_id}' AND product.product_id=cart.product_id`;
         con.query(sql,(err,result1)=>{
-            console.log("result====>",result1)
+            // console.log("result====>",result1)
             var sql = "INSERT INTO order_product_details (order_id,product_id,user_id,qty,product_name,product_price,product_company,product_color,product_discription,product_image) VALUES "
             for(i=0;i<result1.length;i++){
                 order_product_details = {
@@ -251,13 +262,13 @@ router.post("/place_order",(req,res)=>{
                 sql+=`),`;
             }
             sql=sql.slice(0,-1); 
-            console.log("Order product details",sql);
+            // console.log("Order product details",sql);
             con.query(sql,(err,result3)=>{
                 con.query('DELETE FROM cart WHERE user_id="'+req.body.user_id+'"',(err,result5)=>{
                     res.send(
                         `<script>
                                 alert("Order Placed Successfully");
-                                window.location.assign("/order_track?order_id=${result.insertId}");
+                                window.location.assign("/order_track?order_id=${order_id}");
                         </script>
                     `);
                 })                
@@ -267,7 +278,12 @@ router.post("/place_order",(req,res)=>{
 })
 
 router.get("/order_track",(req,res)=>{
-    res.send("Order Track")
-})
+    var urlData=url.parse(req.url,true).query;
+    var sql=`SELECT * FROM order_tbl WHERE order_tbl_id=${urlData.order_id}`
+    con.query(sql,(err,result)=>{
+        console.log(result)
+        res.render("user/order_track.ejs",{'order_details':result[0]})
+    })
+}) 
 
 module.exports = router;
