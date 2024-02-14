@@ -152,12 +152,16 @@ router.get("/add_to_cart",(req,res)=>{
     obj={
         'product_id':urlData.product_id,
         'user_id':req.session.user_id,
-        'qty':1
+        'qty':urlData.qty
     }
     var sql=query.insert("cart",obj);
     con.query(sql,(err,result)=>{
-        // console.log(result);
-        res.redirect("/view_product?product_id="+urlData.product_id);
+        if(urlData.btn=='cart'){
+            res.redirect("/view_product?product_id="+urlData.product_id);
+        }else{
+            res.redirect("/checkout_order");
+
+        }
     })
 })
 
@@ -281,7 +285,7 @@ router.get("/order_track",(req,res)=>{
     var urlData=url.parse(req.url,true).query;
     var sql=`SELECT * FROM order_tbl WHERE order_tbl_id=${urlData.order_id}`
     con.query(sql,(err,result)=>{
-        console.log(result)
+        // console.log(result)
         res.render("user/order_track.ejs",{'order_details':result[0]})
     })
 }) 

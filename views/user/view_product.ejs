@@ -13,9 +13,14 @@
             <h5>Rating : <%=product.product_rating%></h5>
             <p><%=product.product_desciption%></p>
             <% if(!isincart) { %>
-            <a href="/add_to_cart?product_id=<%=product.product_id%>"><button  class="btn btn-primary">ADD TO CART</button></a>
+            <form action="/add_to_cart" method="get">
+                <input type="hidden" name="product_id" value="<%=product.product_id%>">
+                <input type="number" name="qty" value="1" min="1" max="10" size="1">
+                <a href="/add_to_cart?product_id=<%=product.product_id%>">
+                <button  class="btn btn-primary" type="submit" name="btn" value="cart">ADD TO CART</button></a>
+                <button class="btn btn-success" type="submit" name="btn" value="buy">Buy Now</button>
+            </form>
             <% } %>
-            <button class="btn btn-success">Buy Now</button>
         </div>
     </div>
 </div>
