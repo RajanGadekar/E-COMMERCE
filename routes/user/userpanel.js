@@ -224,7 +224,7 @@ var getCDate = (()=>{
     today=new Date();
     m=today.getMonth()+1;
     if(m<10){
-        m="0"+m
+        m="0"+m;
     }
     return today.getFullYear()+'-'+m+'-'+today.getDate();
 })
@@ -235,7 +235,6 @@ router.post("/place_order",(req,res)=>{
     req.body.status='pending';
     req.body.order_date=getCDate()
     var sql=query.insert("order_tbl",req.body);
-    // console.log("order_tbl",sql)
     con.query(sql,(err,result)=>{
         order_id=result.insertId;
         sql=`SELECT * FROM cart,product WHERE user_id='${req.session.user_id}' AND product.product_id=cart.product_id`;
