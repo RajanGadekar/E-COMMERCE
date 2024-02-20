@@ -138,7 +138,6 @@ router.get("/cart",(req,res)=>{
             console.log("sql",sql);
             con.query(sql,(err,result2)=>{
                 console.log("result2",result2);
-
                 data={'navlist':result,'subcategory':result1,'islogin':checkLogin(req.session),'cartdata':result2};
             res.render("user/cart.ejs",data)
             })
@@ -282,7 +281,8 @@ router.post("/place_order",(req,res)=>{
 
 router.get("/order_track",(req,res)=>{
     var urlData=url.parse(req.url,true).query;
-    var sql=`SELECT * FROM order_tbl WHERE order_tbl_id=${urlData.order_id}`
+    var sql=`SELECT * FROM order_tbl WHERE order_tbl_id=${urlData.order_id}`;
+    // console.log(sql);
     con.query(sql,(err,result)=>{
         // console.log(result)
         res.render("user/order_track.ejs",{'order_details':result[0]})
