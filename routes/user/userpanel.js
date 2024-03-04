@@ -250,7 +250,7 @@ router.post("/place_order",(req,res)=>{
                     'product_price':result1[i].product_price,
                     'product_company':result1[i].product_company,
                     'product_color':result1[i].product_color,
-                    'product_discription':result1[i].product_desciption,
+                    'product_discription':result1[i].product_discription,
                     'product_image':result1[i].product_image
                 };
                 sql+=`(`;

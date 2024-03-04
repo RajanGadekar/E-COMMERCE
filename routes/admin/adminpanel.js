@@ -120,6 +120,7 @@ router.post("/save_product",(req,res)=>{
 router.get("/product_list",(req,res)=>{
     var sql = "SELECT * FROM category,subcategory,product WHERE category.category_id=subcategory.cat_id AND subcategory.subcategory_id=product.sub_cat_id";
     con.query(sql,(err,result)=>{
+        // console.log(result)
         res.render("admin/product_list.ejs",{'products':result});
     })
 })
