@@ -108,19 +108,22 @@ router.post("/save_product",(req,res)=>{
     req.body.product_image=img_name;
     // sql=query.create("product",req.body);
     sql=query.insert("product",req.body);  
+    console.log("data is",req.body)
     con.query(sql,(err,result)=>{
         // console.log(req.body);
         res.send(`<script>
             alert('Product Added');
             location.assign('/admin/product');
         </script>`)
+    },(err)=>{
+        console.log("errerr",err);
     })
 })
 
 router.get("/product_list",(req,res)=>{
     var sql = "SELECT * FROM category,subcategory,product WHERE category.category_id=subcategory.cat_id AND subcategory.subcategory_id=product.sub_cat_id";
     con.query(sql,(err,result)=>{
-        // console.log(result)
+        console.log(result)
         res.render("admin/product_list.ejs",{'products':result});
     })
 })

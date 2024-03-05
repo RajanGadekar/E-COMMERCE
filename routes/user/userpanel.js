@@ -110,9 +110,10 @@ router.post("/saveuser",(req,res)=>{
 router.post("/login_process",(req,res)=>{
     id = 10;
     var sql=`SELECT * FROM user_tbl WHERE user_password='${req.body.user_password}' AND email_id='${req.body.user_email}'`;
+    console.log(sql)
     con.query(sql,(err,result)=>{
         if(result.length>0){
-            req.session.user_id=result[0].user_tbl_id;
+            console.log(req.session.user_id=result[0].user_tbl_id)
             res.send(`
                     <script>
                     alert("Login Succesfully");
@@ -125,7 +126,8 @@ router.post("/login_process",(req,res)=>{
                 window.location.assign("/login");
             </script>`)
         }
-    })
+    },(error)=>{console.log(error)})
+
 }) 
 
 router.get("/cart",(req,res)=>{
